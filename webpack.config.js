@@ -22,13 +22,16 @@ module.exports={
             }
         },{
             test: /\.css$/,
-            loader: "style!css"
+            loader: "style-loader!css-loader!autoprefixer-loader"
         },{
             test: /\.(jpg|png|otf)$/,
             loader: "url?limit=8192"
         },{
             test: /\.scss$/,
-            loader: "style!css!sass"
+            loader: "style-loader!css-loader!autoprefixer-loader!sass-loader?outputStyle=expanded"
+        },{
+            test:/\.json$/,
+            loader:'json-loader'
         }]
     }
 }
