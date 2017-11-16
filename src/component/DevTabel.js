@@ -1,43 +1,65 @@
 import { Table, Icon } from 'antd';
 import React from "react";
 import ReactDOM from "react-dom";
-
+import Devconfig from "./config/Devconfig.js";
+import $ from "jquery";
 class DevTabel extends React.Component{
     constructor(props){
-        super(props)
+        super(props);
+        this.state= {
+            data: []
+        }
+    }
+    componentDidMount () {
+        this.getAllDevInfo();
+    }
+    getAllDevInfo(){
+        const me=this;
+        $.ajax({
+            url:"/getAllDev",
+            type: 'get',
+            dataType: 'json',
+            success: data => {
+                me.setState({
+                    data: data
+                });
+            },
+            error: err => {
+                console.log(err);
+            }
+        })
     }
     render(){
-        const data = [{
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-        }, {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-        }, {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park',
-        }];
-
         const columns = [{
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'ip地址',
+            dataIndex: 'IP',
+            key: 'IP',
             render: text => <a href="#">{text}</a>,
         }, {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
+            title: '版本信息',
+            dataIndex: 'version',
+            key: 'version',
         }, {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
+            title: '编译时间',
+            dataIndex: 'time',
+            key: 'time',
         }, {
+            title: '版本用途',
+            dataIndex: 'use',
+            key: 'use',
+        },  {
+            title: '管理口编号',
+            dataIndex: 'IPOP',
+            key: 'IPOP',
+        }, {
+            title: '占用时间',
+            dataIndex: 'usetime',
+            key: 'usetime',
+        },{
+            title: '组员信息',
+            dataIndex: 'teammate',
+            key: 'teammate',
+        },{
             title: 'Action',
             key: 'action',
             render: (text, record) => (
@@ -49,7 +71,12 @@ class DevTabel extends React.Component{
             )
         }];
         return(
-            <Table columns={columns} dataSource={data} />
+            <div>
+                <div style={{ padding: '10px 10px 10px 0px' }}>
+                    <Devconfig handleVal={this.getAllDevInfo.bind(this)}/>
+                </div>
+                <Table columns={columns} dataSource={this.state.data}/>
+            </div>
         )
     }
 }

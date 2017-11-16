@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Layout, Menu, Breadcrumb } from 'antd';
 const { Header, Content, Footer } = Layout;
-import DevTabel from "./component/DevTabel.js"
+import DevTabel from "./component/DevTabel.js";
+import BrowserTabel from "./component/BrowserTabel.js";
+import LeaveTabel from "./component/LeaveTabel.js";
 class Mainpanel extends React.Component{
     constructor(props){
         super(props);
@@ -18,12 +20,14 @@ class Mainpanel extends React.Component{
     onSwitch(active){
         if(active ==1){
             return <DevTabel/>
+        }else if(active ==2){
+            return <BrowserTabel/>
         }else{
-            return ""
+            return <LeaveTabel/>
         }
     }
     render(){
-        const Content = this.onSwitch(this.state.active);
+        const content = this.onSwitch(this.state.active);
         return (
             <Layout className="layout">
                 <Header>
@@ -37,12 +41,12 @@ class Mainpanel extends React.Component{
                     >
                         <Menu.Item key="1">设备信息</Menu.Item>
                         <Menu.Item key="2">浏览器信息</Menu.Item>
-                        <Menu.Item key="3">请加信息</Menu.Item>
+                        <Menu.Item key="3">请假信息</Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
                     <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                        {Content}
+                        {content}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
