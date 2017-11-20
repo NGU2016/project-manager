@@ -29,6 +29,9 @@ class DevTabel extends React.Component{
             }
         })
     }
+    moodifyCobfig(value){
+        this.refs.modify.showModal(value)
+    }
     render(){
         const columns = [{
             title: 'ip地址',
@@ -64,8 +67,9 @@ class DevTabel extends React.Component{
             key: 'action',
             render: (text, record) => (
                <span>
+                   <a onClick={() => this.moodifyCobfig(record)}>编辑</a>
                   <span className="ant-divider"/>
-                  <a href="#">删除</a>
+                  <a href="#" onClick={() => this.moodifyCobfig(record)}>删除</a>
                   <span className="ant-divider"/>
                 </span>
             )
@@ -73,7 +77,7 @@ class DevTabel extends React.Component{
         return(
             <div>
                 <div style={{ padding: '10px 10px 10px 0px' }}>
-                    <Devconfig handleVal={this.getAllDevInfo.bind(this)}/>
+                    <Devconfig handleVal={this.getAllDevInfo.bind(this)} ref="modify"/>
                 </div>
                 <Table columns={columns} dataSource={this.state.data}/>
             </div>

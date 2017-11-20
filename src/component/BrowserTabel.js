@@ -7,6 +7,9 @@ class BrowserTabel extends React.Component{
     constructor(props){
         super(props)
     }
+    getAllBroesInfo(){
+
+    }
     render(){
         const data = [{
             IE: '1',
@@ -46,7 +49,7 @@ class BrowserTabel extends React.Component{
         return(
             <div>
                 <div style={{ padding: '10px 10px 10px 0px' }}>
-                    <BrowserConfig/>
+                    <BrowserConfig handleVal={this.getAllBroesInfo.bind(this)}/>
                 </div>
                 <Table columns={columns} dataSource={data} />
             </div>

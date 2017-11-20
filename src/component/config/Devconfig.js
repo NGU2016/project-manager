@@ -1,71 +1,85 @@
 import React from "react";
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import { Button, Col, Modal, Form, Input, Radio } from 'antd';
 import $ from "jquery";
-const FormItem = Form.Item;
-const CollectionCreateForm = Form.create()(
-    (props) => {
-        const { visible, onCancel, onCreate, form } = props;
-        const { getFieldDecorator } = form;
-        return (
-            <Modal
-                visible={visible}
-                title="新建设备信息"
-                okText="确定"
-                onCancel={onCancel}
-                onOk={onCreate}
-            >
-                <Form layout="vertical">
-                    <FormItem label="ip地址">
-                        {getFieldDecorator('IP', {
-                            rules: [{ required: true, message: '请输入IP地址' }],
-                        })(
-                            <Input />
-                        )}
-                    </FormItem>
-                    <FormItem label="版本信息">
-                        {getFieldDecorator('version')(<Input />)}
-                    </FormItem>
-                    <FormItem label="编译时间">
-                        {getFieldDecorator('time')(<Input />)}
-                    </FormItem>
-                    <FormItem label="版本用途">
-                        {getFieldDecorator('use')(<Input />)}
-                    </FormItem>
-                    <FormItem label="管理口编号">
-                        {getFieldDecorator('IPOP')(<Input />)}
-                    </FormItem>
-                    <FormItem label="占用时间">
-                        {getFieldDecorator('usetime')(<Input />)}
-                    </FormItem>
-                    <FormItem label="组员信息">
-                        {getFieldDecorator('teammate')(<Input />)}
-                    </FormItem>
-                </Form>
-            </Modal>
-        );
-    }
-);
+const InputGroup = Input.Group;
 
 class Devconfig extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
             visible: false,
+            returnvalue:{
+                IP:"",
+                version:"",
+                time:"",
+                use:"",
+                IPOP:"",
+                usetime:"",
+                teammate:""
+
+            }
         };
     }
-    showModal () {
+    showModal (value) {
         this.setState({ visible: true });
+        if(value){
+            console.log(2222)
+            console.log(value)
+            this.state.returnvalue=value;
+        }
     }
     handleCancel () {
+        this.setState({
+            returnvalue:{
+                IP:"",
+                version:"",
+                time:"",
+                use:"",
+                IPOP:"",
+                usetime:"",
+                teammate:""
+
+            }
+        })
         this.setState({ visible: false });
     }
-    setDevConfig (values){
+    handleData(event){
+        const data=this.state.returnvalue;
+        switch (event.target.id){
+            case "IP":
+                data["IP"]=event.target.value;
+                break;
+            case "version":
+                data["version"] = event.target.value;
+                break;
+            case "time":
+                data["time"] = event.target.value;
+                break;
+            case "use":
+                data["use"] = event.target.value;
+                break;
+            case "IPOP":
+                data["IPOP"] =  event.target.value;
+                break;
+            case "usetime":
+                data["usetime"] = event.target.value;
+                break;
+            case "teammate" :
+                data["teammate"] = event.target.value;
+                break;
+        }
+        console.log(data);
+        this.setState({
+            returnvalue:data
+        })
+    }
+    setDevConfig (){
         const me=this;
         $.ajax({
             url:"/setDevConfig",
             type: 'post',
             dataType: 'json',
-            data:values,
+            data:me.state.returnvalue,
             success: data => {
                 me.props.handleVal();//调用父组件的刷新方法
             },
@@ -75,30 +89,75 @@ class Devconfig extends React.Component {
         })
     }
     handleCreate () {
-        const form = this.form;
-        form.validateFields((err, values) => {
-            if (err) {
-                return;
-            }else{
-                this.setDevConfig(values);
-            }
-            form.resetFields();
-            this.setState({ visible: false });
-        });
-    }
-    saveFormRef (form) {
-        this.form = form;
+        this.setDevConfig();
     }
     render() {
         return (
             <div>
                 <Button type="primary" onClick={this.showModal.bind(this)}>新建</Button>
-                <CollectionCreateForm
-                    ref={this.saveFormRef.bind(this)}
+                <Modal
+                    title="新建设备信息"
                     visible={this.state.visible}
+                    onOk={this.handleCreate.bind(this)}
                     onCancel={this.handleCancel.bind(this)}
-                    onCreate={this.handleCreate.bind(this)}
-                />
+                >
+                    <InputGroup style={{margin:"0 0 10px 0"}}>
+                        <Col span={5}>
+                            <label>ip地址</label>
+                        </Col>
+                        <Col span={7}>
+                            <Input style={{width:"350px"}} type="text" value={this.state.returnvalue.IP} id="IP" onChange={this.handleData.bind(this)}/>
+                        </Col>
+                    </InputGroup>
+                    <InputGroup style={{margin:"0 0 10px 0"}}>
+                        <Col span={5}>
+                            <label>版本信息</label>
+                        </Col>
+                        <Col span={7}>
+                            <Input style={{width:"350px"}} type="text" value={this.state.returnvalue.version} id="version" onChange={this.handleData.bind(this)}/>
+                        </Col>
+                    </InputGroup>
+                    <InputGroup style={{margin:"0 0 10px 0"}}>
+                        <Col span={5}>
+                            <label>编译时间</label>
+                        </Col>
+                        <Col span={7}>
+                            <Input style={{width:"350px"}} type="text" value={this.state.returnvalue.time} id="time" onChange={this.handleData.bind(this)}/>
+                        </Col>
+                    </InputGroup>
+                    <InputGroup style={{margin:"0 0 10px 0"}}>
+                        <Col span={5}>
+                            <label>版本用途</label>
+                        </Col>
+                        <Col span={7}>
+                            <Input style={{width:"350px"}} type="text" id="use" value={this.state.returnvalue.use} onChange={this.handleData.bind(this)}/>
+                        </Col>
+                    </InputGroup>
+                    <InputGroup style={{margin:"0 0 10px 0"}}>
+                        <Col span={5}>
+                            <label>管理口编号</label>
+                        </Col>
+                        <Col span={7}>
+                            <Input style={{width:"350px"}} type="text" id="IPOP" value={this.state.returnvalue.IPOP} onChange={this.handleData.bind(this)}/>
+                        </Col>
+                    </InputGroup>
+                    <InputGroup style={{margin:"0 0 10px 0"}}>
+                        <Col span={5}>
+                            <label>占用时间</label>
+                        </Col>
+                        <Col span={7}>
+                            <Input style={{width:"350px"}} type="text" id="usetime" value={this.state.returnvalue.usetime} onChange={this.handleData.bind(this)}/>
+                        </Col>
+                    </InputGroup>
+                    <InputGroup style={{margin:"0 0 10px 0"}}>
+                        <Col span={5}>
+                            <label>组员信息</label>
+                        </Col>
+                        <Col span={7}>
+                            <Input style={{width:"350px"}} type="text" id="teammate" value={this.state.returnvalue.teammate} onChange={this.handleData.bind(this)}/>
+                        </Col>
+                    </InputGroup>
+                </Modal>
             </div>
         );
     }
