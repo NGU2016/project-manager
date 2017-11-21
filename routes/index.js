@@ -32,5 +32,37 @@ router.post("/setDevConfig",(req,res,next)=>{
               });
           }
       })
-})
+});
+
+router.post("/deleteRawDev",(req,res,next)=>{
+    const deleteItem = req.body;
+    devModule.remove(deleteItem, (err,data) => {
+        if (err) {
+            console.log(err);
+        }else {
+            res.json(data)
+        }
+    })
+});
+
+router.post("/updateDev",(req,res,next)=>{
+    const deleteItem = req.body;
+    const ID=deleteItem._id;
+    devModule.update({"_id":ID},{$set:{
+        IP:deleteItem.IP,
+        version:deleteItem.version,
+        time:deleteItem.time,
+        use:deleteItem.use,
+        IPOP:deleteItem.IPOP,
+        usetime:deleteItem.usetime,
+        teammate:deleteItem.teammate
+    }
+    }, (err,data) => {
+        if (err) {
+            console.log(err);
+        }else {
+            res.json(data)
+        }
+    })
+});
 module.exports = router;

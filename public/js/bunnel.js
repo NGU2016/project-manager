@@ -30676,8 +30676,13 @@ var BrowserTabel = function (_React$Component) {
         key: "getAllBroesInfo",
         value: function getAllBroesInfo() {}
     }, {
+        key: "deleteRaw",
+        value: function deleteRaw() {}
+    }, {
         key: "render",
         value: function render() {
+            var _this2 = this;
+
             var data = [{
                 IE: '1',
                 firefox: 'IE',
@@ -30718,7 +30723,7 @@ var BrowserTabel = function (_React$Component) {
                         _react2.default.createElement("span", { className: "ant-divider" }),
                         _react2.default.createElement(
                             "a",
-                            { href: "#" },
+                            { onClick: _this2.deleteRaw(record) },
                             "\u5220\u9664"
                         ),
                         _react2.default.createElement("span", { className: "ant-divider" })
@@ -30733,7 +30738,7 @@ var BrowserTabel = function (_React$Component) {
                     { style: { padding: '10px 10px 10px 0px' } },
                     _react2.default.createElement(_BrowserConfig2.default, { handleVal: this.getAllBroesInfo.bind(this) })
                 ),
-                _react2.default.createElement(_table2.default, { columns: columns, dataSource: data })
+                _react2.default.createElement(_table2.default, { columns: columns, dataSource: data, bordered: true })
             );
         }
     }]);
@@ -30824,9 +30829,27 @@ var DevTabel = function (_React$Component) {
             });
         }
     }, {
-        key: "moodifyCobfig",
-        value: function moodifyCobfig(value) {
-            this.refs.modify.showModal(value);
+        key: "modifyConfig",
+        value: function modifyConfig(value, isEdit) {
+            var values = JSON.parse(JSON.stringify(value));
+            this.refs.DevModify.showModal(values, isEdit);
+        }
+    }, {
+        key: "deleteRaw",
+        value: function deleteRaw(value) {
+            var me = this;
+            _jquery2.default.ajax({
+                url: "/deleteRawDev",
+                type: 'post',
+                dataType: 'json',
+                data: value,
+                success: function success(data) {
+                    me.getAllDevInfo();
+                },
+                error: function error(err) {
+                    console.log(err);
+                }
+            });
         }
     }, {
         key: "render",
@@ -30834,7 +30857,7 @@ var DevTabel = function (_React$Component) {
             var _this2 = this;
 
             var columns = [{
-                title: 'ip地址',
+                title: '设备地址',
                 dataIndex: 'IP',
                 key: 'IP',
                 render: function render(text) {
@@ -30869,7 +30892,7 @@ var DevTabel = function (_React$Component) {
                 dataIndex: 'teammate',
                 key: 'teammate'
             }, {
-                title: 'Action',
+                title: '编辑',
                 key: 'action',
                 render: function render(text, record) {
                     return _react2.default.createElement(
@@ -30878,7 +30901,7 @@ var DevTabel = function (_React$Component) {
                         _react2.default.createElement(
                             "a",
                             { onClick: function onClick() {
-                                    return _this2.moodifyCobfig(record);
+                                    return _this2.modifyConfig(record, true);
                                 } },
                             "\u7F16\u8F91"
                         ),
@@ -30886,7 +30909,7 @@ var DevTabel = function (_React$Component) {
                         _react2.default.createElement(
                             "a",
                             { href: "#", onClick: function onClick() {
-                                    return _this2.moodifyCobfig(record);
+                                    return _this2.deleteRaw(record);
                                 } },
                             "\u5220\u9664"
                         ),
@@ -30900,9 +30923,9 @@ var DevTabel = function (_React$Component) {
                 _react2.default.createElement(
                     "div",
                     { style: { padding: '10px 10px 10px 0px' } },
-                    _react2.default.createElement(_Devconfig2.default, { handleVal: this.getAllDevInfo.bind(this), ref: "modify" })
+                    _react2.default.createElement(_Devconfig2.default, { handleVal: this.getAllDevInfo.bind(this), ref: "DevModify" })
                 ),
-                _react2.default.createElement(_table2.default, { columns: columns, dataSource: this.state.data })
+                _react2.default.createElement(_table2.default, { columns: columns, dataSource: this.state.data, bordered: true })
             );
         }
     }]);
@@ -64080,6 +64103,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _modal = __webpack_require__(153);
+
+var _modal2 = _interopRequireDefault(_modal);
+
 var _col = __webpack_require__(142);
 
 var _col2 = _interopRequireDefault(_col);
@@ -64087,10 +64114,6 @@ var _col2 = _interopRequireDefault(_col);
 var _button = __webpack_require__(52);
 
 var _button2 = _interopRequireDefault(_button);
-
-var _modal = __webpack_require__(153);
-
-var _modal2 = _interopRequireDefault(_modal);
 
 var _form = __webpack_require__(244);
 
@@ -64102,11 +64125,11 @@ var _input2 = _interopRequireDefault(_input);
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+__webpack_require__(154);
+
 __webpack_require__(143);
 
 __webpack_require__(64);
-
-__webpack_require__(154);
 
 __webpack_require__(245);
 
@@ -64127,51 +64150,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var InputGroup = _input2.default.Group;
 var FormItem = _form2.default.Item;
 
-var CollectionCreateForm = _form2.default.create()(function (props) {
-    var visible = props.visible,
-        onCancel = props.onCancel,
-        onCreate = props.onCreate,
-        form = props.form;
-    var getFieldDecorator = form.getFieldDecorator;
-
-    return _react2.default.createElement(
-        _modal2.default,
-        {
-            visible: visible,
-            title: "\u65B0\u5EFA\u6D4F\u89C8\u5668\u4FE1\u606F",
-            okText: "\u786E\u5B9A",
-            onCancel: onCancel,
-            onOk: onCreate
-        },
-        _react2.default.createElement(
-            _form2.default,
-            { layout: "vertical" },
-            _react2.default.createElement(
-                FormItem,
-                { label: "IE(\u7248\u672C)" },
-                getFieldDecorator('IE')(_react2.default.createElement(_input2.default, null))
-            ),
-            _react2.default.createElement(
-                FormItem,
-                { label: "\u706B\u72D0(\u7248\u672C)" },
-                getFieldDecorator('firefox')(_react2.default.createElement(_input2.default, null))
-            ),
-            _react2.default.createElement(
-                FormItem,
-                { label: "\u8C37\u6B4C(\u7248\u672C)" },
-                getFieldDecorator('chrome')(_react2.default.createElement(_input2.default, null))
-            ),
-            _react2.default.createElement(
-                FormItem,
-                { label: "\u7EC4\u5458\u4FE1\u606F" },
-                getFieldDecorator('teammate', {
-                    rules: [{ required: true, message: '请输入组员信息' }]
-                })(_react2.default.createElement(_input2.default, null))
-            )
-        )
-    );
-});
-
 var BrowserConfig = function (_React$Component) {
     _inherits(BrowserConfig, _React$Component);
 
@@ -64187,7 +64165,8 @@ var BrowserConfig = function (_React$Component) {
                 firefox: "",
                 chrome: "",
                 teammate: ""
-            }
+            },
+            isEdit: false
         };
         return _this;
     }
@@ -64200,9 +64179,9 @@ var BrowserConfig = function (_React$Component) {
     }, {
         key: "handleData",
         value: function handleData(event) {
-            var data = this.state.returnvalue;
+            var data = this.state.returnValue;
             switch (event.target.id) {
-                case "IP":
+                case "IE":
                     data["IE"] = event.target.value;
                     break;
                 case "version":
@@ -64217,7 +64196,7 @@ var BrowserConfig = function (_React$Component) {
             }
             console.log(data);
             this.setState({
-                returnvalue: data
+                returnValue: data
             });
         }
     }, {
@@ -64228,7 +64207,7 @@ var BrowserConfig = function (_React$Component) {
                 url: "/setDevConfig",
                 type: 'post',
                 dataType: 'json',
-                data: this.state.returnvalue,
+                data: this.state.returnValue,
                 success: function success(data) {
                     me.props.handleVal(); //调用父组件的刷新方法
                 },
@@ -64240,6 +64219,14 @@ var BrowserConfig = function (_React$Component) {
     }, {
         key: "handleCancel",
         value: function handleCancel() {
+            this.setState({
+                returnValue: {
+                    IE: "",
+                    firefox: "",
+                    chrome: "",
+                    teammate: ""
+                }
+            });
             this.setState({ visible: false });
         }
     }, {
@@ -64281,7 +64268,7 @@ var BrowserConfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnvalue.IE, id: "IE", onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnValue.IE, id: "IE", onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64299,7 +64286,7 @@ var BrowserConfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnvalue.firefox, id: "firefox", onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnValue.firefox, id: "firefox", onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64317,7 +64304,7 @@ var BrowserConfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnvalue.chrome, id: "chrome", onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnValue.chrome, id: "chrome", onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64335,7 +64322,7 @@ var BrowserConfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "teammate", value: this.state.returnvalue.teammate, onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "teammate", value: this.state.returnValue.teammate, onChange: this.handleData.bind(this) })
                         )
                     )
                 )
@@ -64413,7 +64400,7 @@ var Devconfig = function (_React$Component) {
 
         _this.state = {
             visible: false,
-            returnvalue: {
+            returnValue: {
                 IP: "",
                 version: "",
                 time: "",
@@ -64422,26 +64409,28 @@ var Devconfig = function (_React$Component) {
                 usetime: "",
                 teammate: ""
 
-            }
+            },
+            isEdit: false
         };
         return _this;
     }
 
     _createClass(Devconfig, [{
         key: "showModal",
-        value: function showModal(value) {
+        value: function showModal(value, isEdit) {
             this.setState({ visible: true });
-            if (value) {
-                console.log(2222);
-                console.log(value);
-                this.state.returnvalue = value;
+            if (isEdit) {
+                this.setState({
+                    returnValue: value,
+                    isEdit: true
+                });
             }
         }
     }, {
         key: "handleCancel",
         value: function handleCancel() {
             this.setState({
-                returnvalue: {
+                returnValue: {
                     IP: "",
                     version: "",
                     time: "",
@@ -64449,7 +64438,6 @@ var Devconfig = function (_React$Component) {
                     IPOP: "",
                     usetime: "",
                     teammate: ""
-
                 }
             });
             this.setState({ visible: false });
@@ -64457,7 +64445,7 @@ var Devconfig = function (_React$Component) {
     }, {
         key: "handleData",
         value: function handleData(event) {
-            var data = this.state.returnvalue;
+            var data = this.state.returnValue;
             switch (event.target.id) {
                 case "IP":
                     data["IP"] = event.target.value;
@@ -64481,27 +64469,43 @@ var Devconfig = function (_React$Component) {
                     data["teammate"] = event.target.value;
                     break;
             }
-            console.log(data);
             this.setState({
-                returnvalue: data
+                returnValue: data
             });
         }
     }, {
         key: "setDevConfig",
         value: function setDevConfig() {
             var me = this;
-            _jquery2.default.ajax({
-                url: "/setDevConfig",
-                type: 'post',
-                dataType: 'json',
-                data: me.state.returnvalue,
-                success: function success(data) {
-                    me.props.handleVal(); //调用父组件的刷新方法
-                },
-                error: function error(err) {
-                    console.log(err);
-                }
-            });
+            if (this.state.isEdit) {
+                _jquery2.default.ajax({
+                    url: "/updateDev",
+                    type: 'post',
+                    dataType: 'json',
+                    data: me.state.returnValue,
+                    success: function success(data) {
+                        me.props.handleVal(); //调用父组件的刷新方法
+                    },
+                    error: function error(err) {
+                        console.log(err);
+                    }
+                });
+            } else {
+                _jquery2.default.ajax({
+                    url: "/setDevConfig",
+                    type: 'post',
+                    dataType: 'json',
+                    data: me.state.returnValue,
+                    success: function success(data) {
+                        me.props.handleVal(); //调用父组件的刷新方法
+                    },
+                    error: function error(err) {
+                        console.log(err);
+                    }
+                });
+            }
+
+            this.setState({ visible: false });
         }
     }, {
         key: "handleCreate",
@@ -64536,13 +64540,13 @@ var Devconfig = function (_React$Component) {
                             _react2.default.createElement(
                                 "label",
                                 null,
-                                "ip\u5730\u5740"
+                                "\u8BBE\u5907\u5730\u5740"
                             )
                         ),
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnvalue.IP, id: "IP", onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnValue.IP, id: "IP", onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64560,7 +64564,7 @@ var Devconfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnvalue.version, id: "version", onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnValue.version, id: "version", onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64578,7 +64582,7 @@ var Devconfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnvalue.time, id: "time", onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", value: this.state.returnValue.time, id: "time", onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64596,7 +64600,7 @@ var Devconfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "use", value: this.state.returnvalue.use, onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "use", value: this.state.returnValue.use, onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64614,7 +64618,7 @@ var Devconfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "IPOP", value: this.state.returnvalue.IPOP, onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "IPOP", value: this.state.returnValue.IPOP, onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64632,7 +64636,7 @@ var Devconfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "usetime", value: this.state.returnvalue.usetime, onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "usetime", value: this.state.returnValue.usetime, onChange: this.handleData.bind(this) })
                         )
                     ),
                     _react2.default.createElement(
@@ -64650,7 +64654,7 @@ var Devconfig = function (_React$Component) {
                         _react2.default.createElement(
                             _col2.default,
                             { span: 7 },
-                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "teammate", value: this.state.returnvalue.teammate, onChange: this.handleData.bind(this) })
+                            _react2.default.createElement(_input2.default, { style: { width: "350px" }, type: "text", id: "teammate", value: this.state.returnValue.teammate, onChange: this.handleData.bind(this) })
                         )
                     )
                 )

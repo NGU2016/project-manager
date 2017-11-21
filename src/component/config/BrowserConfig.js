@@ -3,38 +3,6 @@ import { Button,Col, Modal, Form, Input, Radio } from 'antd';
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
 
-const CollectionCreateForm = Form.create()(
-    (props) => {
-        const { visible, onCancel, onCreate, form } = props;
-        const { getFieldDecorator } = form;
-        return (
-            <Modal
-                visible={visible}
-                title="新建浏览器信息"
-                okText="确定"
-                onCancel={onCancel}
-                onOk={onCreate}
-            >
-                <Form layout="vertical">
-                    <FormItem label="IE(版本)">
-                        {getFieldDecorator('IE')( <Input />)}
-                    </FormItem>
-                    <FormItem label="火狐(版本)">
-                        {getFieldDecorator('firefox')(<Input />)}
-                    </FormItem>
-                    <FormItem label="谷歌(版本)">
-                        {getFieldDecorator('chrome')(<Input />)}
-                    </FormItem>
-                    <FormItem label="组员信息">
-                        {getFieldDecorator('teammate',{
-                            rules: [{ required: true, message: '请输入组员信息' }],
-                        })(<Input />)}
-                    </FormItem>
-                </Form>
-            </Modal>
-        );
-    }
-);
 
 class BrowserConfig extends React.Component {
     constructor (props) {
@@ -46,16 +14,17 @@ class BrowserConfig extends React.Component {
                 firefox:"",
                 chrome:"",
                 teammate:""
-            }
+            },
+            isEdit:false
         };
     }
     showModal () {
         this.setState({ visible: true });
     }
     handleData(event){
-        var data=this.state.returnvalue;
+        var data=this.state.returnValue;
         switch (event.target.id){
-            case "IP":
+            case "IE":
                 data["IE"]=event.target.value;
                 break;
             case "version":
@@ -70,7 +39,7 @@ class BrowserConfig extends React.Component {
         }
         console.log(data)
         this.setState({
-            returnvalue:data
+            returnValue:data
         })
     }
     setBrowsConfig (){
@@ -79,7 +48,7 @@ class BrowserConfig extends React.Component {
             url:"/setDevConfig",
             type: 'post',
             dataType: 'json',
-            data:this.state.returnvalue,
+            data:this.state.returnValue,
             success: data => {
                 me.props.handleVal();//调用父组件的刷新方法
             },
@@ -89,6 +58,14 @@ class BrowserConfig extends React.Component {
         })
     }
     handleCancel () {
+        this.setState({
+            returnValue:{
+                IE:"",
+                firefox:"",
+                chrome:"",
+                teammate:""
+            }
+        })
         this.setState({ visible: false });
     }
     handleCreate () {
@@ -109,7 +86,7 @@ class BrowserConfig extends React.Component {
                             <label>IE(版本)</label>
                         </Col>
                         <Col span={7}>
-                            <Input style={{width:"350px"}} type="text" value={this.state.returnvalue.IE} id="IE" onChange={this.handleData.bind(this)}/>
+                            <Input style={{width:"350px"}} type="text" value={this.state.returnValue.IE} id="IE" onChange={this.handleData.bind(this)}/>
                         </Col>
                     </InputGroup>
                     <InputGroup style={{margin:"0 0 10px 0"}}>
@@ -117,7 +94,7 @@ class BrowserConfig extends React.Component {
                             <label>火狐(版本)</label>
                         </Col>
                         <Col span={7}>
-                            <Input style={{width:"350px"}} type="text" value={this.state.returnvalue.firefox} id="firefox" onChange={this.handleData.bind(this)}/>
+                            <Input style={{width:"350px"}} type="text" value={this.state.returnValue.firefox} id="firefox" onChange={this.handleData.bind(this)}/>
                         </Col>
                     </InputGroup>
                     <InputGroup style={{margin:"0 0 10px 0"}}>
@@ -125,7 +102,7 @@ class BrowserConfig extends React.Component {
                             <label>谷歌(版本)</label>
                         </Col>
                         <Col span={7}>
-                            <Input style={{width:"350px"}} type="text" value={this.state.returnvalue.chrome} id="chrome" onChange={this.handleData.bind(this)}/>
+                            <Input style={{width:"350px"}} type="text" value={this.state.returnValue.chrome} id="chrome" onChange={this.handleData.bind(this)}/>
                         </Col>
                     </InputGroup>
                     <InputGroup style={{margin:"0 0 10px 0"}}>
@@ -133,7 +110,7 @@ class BrowserConfig extends React.Component {
                             <label>组员信息</label>
                         </Col>
                         <Col span={7}>
-                            <Input style={{width:"350px"}} type="text" id="teammate" value={this.state.returnvalue.teammate} onChange={this.handleData.bind(this)}/>
+                            <Input style={{width:"350px"}} type="text" id="teammate" value={this.state.returnValue.teammate} onChange={this.handleData.bind(this)}/>
                         </Col>
                     </InputGroup>
                 </Modal>

@@ -10,6 +10,9 @@ class BrowserTabel extends React.Component{
     getAllBroesInfo(){
 
     }
+    deleteRaw(){
+
+    }
     render(){
         const data = [{
             IE: '1',
@@ -41,7 +44,7 @@ class BrowserTabel extends React.Component{
             render: (text, record) => (
                 <span>
                   <span className="ant-divider"/>
-                  <a href="#">删除</a>
+                  <a onClick={this.deleteRaw(record)}>删除</a>
                   <span className="ant-divider"/>
                 </span>
             )
@@ -51,7 +54,7 @@ class BrowserTabel extends React.Component{
                 <div style={{ padding: '10px 10px 10px 0px' }}>
                     <BrowserConfig handleVal={this.getAllBroesInfo.bind(this)}/>
                 </div>
-                <Table columns={columns} dataSource={data} />
+                <Table columns={columns} dataSource={data} bordered={true}/>
             </div>
         )
     }

@@ -29,12 +29,28 @@ class DevTabel extends React.Component{
             }
         })
     }
-    moodifyCobfig(value){
-        this.refs.modify.showModal(value)
+    modifyConfig(value,isEdit){
+        var values=JSON.parse(JSON.stringify(value))
+        this.refs.DevModify.showModal(values,isEdit)
+    }
+    deleteRaw (value){
+        const me=this;
+        $.ajax({
+            url:"/deleteRawDev",
+            type: 'post',
+            dataType: 'json',
+            data:value,
+            success: data => {
+                me.getAllDevInfo()
+            },
+            error: err => {
+                console.log(err);
+            }
+        })
     }
     render(){
         const columns = [{
-            title: 'ip地址',
+            title: '设备地址',
             dataIndex: 'IP',
             key: 'IP',
             render: text => <a href="#">{text}</a>,
@@ -63,13 +79,13 @@ class DevTabel extends React.Component{
             dataIndex: 'teammate',
             key: 'teammate',
         },{
-            title: 'Action',
+            title: '编辑',
             key: 'action',
             render: (text, record) => (
                <span>
-                   <a onClick={() => this.moodifyCobfig(record)}>编辑</a>
+                   <a onClick={() => this.modifyConfig(record,true)}>编辑</a>
                   <span className="ant-divider"/>
-                  <a href="#" onClick={() => this.moodifyCobfig(record)}>删除</a>
+                  <a href="#" onClick={() => this.deleteRaw(record)}>删除</a>
                   <span className="ant-divider"/>
                 </span>
             )
@@ -77,9 +93,9 @@ class DevTabel extends React.Component{
         return(
             <div>
                 <div style={{ padding: '10px 10px 10px 0px' }}>
-                    <Devconfig handleVal={this.getAllDevInfo.bind(this)} ref="modify"/>
+                    <Devconfig handleVal={this.getAllDevInfo.bind(this)} ref="DevModify"/>
                 </div>
-                <Table columns={columns} dataSource={this.state.data}/>
+                <Table columns={columns} dataSource={this.state.data} bordered={true}/>
             </div>
         )
     }
