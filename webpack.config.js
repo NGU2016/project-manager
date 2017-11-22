@@ -25,7 +25,7 @@ module.exports={
             loader: "style-loader!css-loader!autoprefixer-loader"
         },{
             test: /\.(jpg|png|otf)$/,
-            loader: "url?limit=8192"
+            loader: "file-loader?name=./imag/[name].[ext]"
         },{
             test: /\.scss$/,
             loader: "style-loader!css-loader!autoprefixer-loader!sass-loader?outputStyle=expanded"

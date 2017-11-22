@@ -1,4 +1,4 @@
-import { Table, Icon } from 'antd';
+import { Table,Button, Icon } from 'antd';
 import React from "react";
 import ReactDOM from "react-dom";
 import Devconfig from "./config/Devconfig.js";
@@ -30,7 +30,7 @@ class DevTabel extends React.Component{
         })
     }
     modifyConfig(value,isEdit){
-        var values=JSON.parse(JSON.stringify(value))
+        const values=JSON.parse(JSON.stringify(value))
         this.refs.DevModify.showModal(values,isEdit)
     }
     deleteRaw (value){
@@ -81,11 +81,12 @@ class DevTabel extends React.Component{
         },{
             title: '编辑',
             key: 'action',
+            width:"178px",
             render: (text, record) => (
                <span>
-                   <a onClick={() => this.modifyConfig(record,true)}>编辑</a>
+                   <Button type="primary" onClick={() => this.modifyConfig(record,true)}>编辑</Button>
                   <span className="ant-divider"/>
-                  <a href="#" onClick={() => this.deleteRaw(record)}>删除</a>
+                  <Button  type="danger" onClick={() => this.deleteRaw(record)}>删除</Button>
                   <span className="ant-divider"/>
                 </span>
             )

@@ -1,5 +1,6 @@
 import React from "react";
 import { Button,Col, Modal, Form, Input, Radio } from 'antd';
+import $ from "jquery";
 const InputGroup = Input.Group;
 const FormItem = Form.Item;
 
@@ -18,8 +19,14 @@ class BrowserConfig extends React.Component {
             isEdit:false
         };
     }
-    showModal () {
+    showModal (value,isEdit) {
         this.setState({ visible: true });
+        if(isEdit){
+            this.setState({
+                returnValue : value,
+                isEdit:true
+            })
+        }
     }
     handleData(event){
         var data=this.state.returnValue;
@@ -37,15 +44,21 @@ class BrowserConfig extends React.Component {
                 data["teammate"] = event.target.value;
                 break;
         }
-        console.log(data)
+        console.log(data);
         this.setState({
             returnValue:data
         })
     }
     setBrowsConfig (){
         const me=this;
+        let actionUrl="";
+        if(this.state.isEdit){
+            actionUrl="/updateBrowsConfig";
+        }else{
+            actionUrl="/setBrowsConfig";
+        }
         $.ajax({
-            url:"/setDevConfig",
+            url:actionUrl,
             type: 'post',
             dataType: 'json',
             data:this.state.returnValue,
@@ -56,6 +69,9 @@ class BrowserConfig extends React.Component {
                 console.log(err);
             }
         })
+        this.setState({
+            visible: false,
+        })
     }
     handleCancel () {
         this.setState({
@@ -64,9 +80,10 @@ class BrowserConfig extends React.Component {
                 firefox:"",
                 chrome:"",
                 teammate:""
-            }
-        })
-        this.setState({ visible: false });
+            },
+            visible: false,
+            isEdit:false
+        });
     }
     handleCreate () {
         this.setBrowsConfig();
