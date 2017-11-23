@@ -30722,7 +30722,7 @@ var BrowserTabel = function (_React$Component) {
             var me = this;
             _jquery2.default.ajax({
                 url: "/deleteRawBrow",
-                type: 'get',
+                type: 'post',
                 dataType: 'json',
                 success: function success(data) {
                     me.getAllBrowserInfo();
@@ -64258,17 +64258,16 @@ var BrowserConfig = function (_React$Component) {
                 case "IE":
                     data["IE"] = event.target.value;
                     break;
-                case "version":
+                case "firefox":
                     data["firefox"] = event.target.value;
                     break;
-                case "time":
+                case "chrome":
                     data["chrome"] = event.target.value;
                     break;
-                case "use":
+                case "teammate":
                     data["teammate"] = event.target.value;
                     break;
             }
-            console.log(data);
             this.setState({
                 returnValue: data
             });
@@ -64283,12 +64282,22 @@ var BrowserConfig = function (_React$Component) {
             } else {
                 actionUrl = "/setBrowsConfig";
             }
+            console.log(actionUrl);
+            console.log(this.state.returnValue);
             _jquery2.default.ajax({
                 url: actionUrl,
                 type: 'post',
                 dataType: 'json',
                 data: this.state.returnValue,
                 success: function success(data) {
+                    me.setState({
+                        returnValue: {
+                            IE: "",
+                            firefox: "",
+                            chrome: "",
+                            teammate: ""
+                        }
+                    });
                     me.props.handleVal(); //调用父组件的刷新方法
                 },
                 error: function error(err) {

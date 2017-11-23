@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 
 class BrowserConfig extends React.Component {
     constructor (props) {
-        super(props)
+        super(props);
         this.state = {
             visible: false,
             returnValue:{
@@ -34,17 +34,16 @@ class BrowserConfig extends React.Component {
             case "IE":
                 data["IE"]=event.target.value;
                 break;
-            case "version":
+            case "firefox":
                 data["firefox"] = event.target.value;
                 break;
-            case "time":
+            case "chrome":
                 data["chrome"] = event.target.value;
                 break;
-            case "use":
+            case "teammate":
                 data["teammate"] = event.target.value;
                 break;
         }
-        console.log(data);
         this.setState({
             returnValue:data
         })
@@ -57,12 +56,22 @@ class BrowserConfig extends React.Component {
         }else{
             actionUrl="/setBrowsConfig";
         }
+        console.log(actionUrl)
+        console.log(this.state.returnValue)
         $.ajax({
             url:actionUrl,
             type: 'post',
             dataType: 'json',
             data:this.state.returnValue,
             success: data => {
+                me.setState({
+                    returnValue:{
+                        IE:"",
+                        firefox:"",
+                        chrome:"",
+                        teammate:""
+                    }
+                });
                 me.props.handleVal();//调用父组件的刷新方法
             },
             error: err => {

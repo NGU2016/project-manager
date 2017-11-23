@@ -39,7 +39,7 @@ class BrowserTabel extends React.Component{
         const me=this;
         $.ajax({
             url:"/deleteRawBrow",
-            type: 'get',
+            type: 'post',
             dataType: 'json',
             success: data => {
                 me.getAllBrowserInfo();

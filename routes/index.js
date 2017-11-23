@@ -76,7 +76,9 @@ router.get('/getAllBrowser', (req, res, next) => {
         if (err) {
             console.log(err);
         }else {
+            console.log(data)
             res.json(data);
+
         }
     });
 });
