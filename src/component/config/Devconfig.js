@@ -46,7 +46,8 @@ class Devconfig extends React.Component {
     }
     handleData(event){
         const data=this.state.returnValue;
-        switch (event.target.id){
+        data[event.target.id]=event.target.value;
+        /*switch (event.target.id){
             case "IP":
                 data["IP"]=event.target.value;
                 break;
@@ -68,7 +69,7 @@ class Devconfig extends React.Component {
             case "teammate" :
                 data["teammate"] = event.target.value;
                 break;
-        }
+        }*/
         this.setState({
             returnValue:data
         })

@@ -8,7 +8,7 @@ const FormItem = Form.Item;
 class BrowserConfig extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {
+        this.state = {//优化：清空配置项可以提成一个方法
             visible: false,
             returnValue:{
                 IE:"",
@@ -30,7 +30,8 @@ class BrowserConfig extends React.Component {
     }
     handleData(event){
         var data=this.state.returnValue;
-        switch (event.target.id){
+        data[event.target.id]=event.target.value;
+        /*switch (event.target.id){
             case "IE":
                 data["IE"]=event.target.value;
                 break;
@@ -43,7 +44,7 @@ class BrowserConfig extends React.Component {
             case "teammate":
                 data["teammate"] = event.target.value;
                 break;
-        }
+        }*/
         this.setState({
             returnValue:data
         })
@@ -56,13 +57,11 @@ class BrowserConfig extends React.Component {
         }else{
             actionUrl="/setBrowsConfig";
         }
-        console.log(actionUrl)
-        console.log(this.state.returnValue)
         $.ajax({
             url:actionUrl,
             type: 'post',
             dataType: 'json',
-            data:this.state.returnValue,
+            data:me.state.returnValue,
             success: data => {
                 me.setState({
                     returnValue:{
@@ -77,7 +76,7 @@ class BrowserConfig extends React.Component {
             error: err => {
                 console.log(err);
             }
-        })
+        });
         this.setState({
             visible: false,
         })
@@ -112,7 +111,7 @@ class BrowserConfig extends React.Component {
                             <label>IE(版本)</label>
                         </Col>
                         <Col span={7}>
-                            <Input style={{width:"350px"}} type="text" value={this.state.returnValue.IE} id="IE" onChange={this.handleData.bind(this)}/>
+                            <Input style={{width:"350px"}} type="text" id="IE" value={this.state.returnValue.IE}  onChange={this.handleData.bind(this)}/>
                         </Col>
                     </InputGroup>
                     <InputGroup style={{margin:"0 0 10px 0"}}>
@@ -120,7 +119,7 @@ class BrowserConfig extends React.Component {
                             <label>火狐(版本)</label>
                         </Col>
                         <Col span={7}>
-                            <Input style={{width:"350px"}} type="text" value={this.state.returnValue.firefox} id="firefox" onChange={this.handleData.bind(this)}/>
+                            <Input style={{width:"350px"}} type="text" id="firefox" value={this.state.returnValue.firefox}  onChange={this.handleData.bind(this)}/>
                         </Col>
                     </InputGroup>
                     <InputGroup style={{margin:"0 0 10px 0"}}>
@@ -128,7 +127,7 @@ class BrowserConfig extends React.Component {
                             <label>谷歌(版本)</label>
                         </Col>
                         <Col span={7}>
-                            <Input style={{width:"350px"}} type="text" value={this.state.returnValue.chrome} id="chrome" onChange={this.handleData.bind(this)}/>
+                            <Input style={{width:"350px"}} type="text" id="chrome" value={this.state.returnValue.chrome}  onChange={this.handleData.bind(this)}/>
                         </Col>
                     </InputGroup>
                     <InputGroup style={{margin:"0 0 10px 0"}}>

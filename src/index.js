@@ -1,3 +1,7 @@
+/*
+* 优化
+* 1，整个导航条的配置项每一个内容都差不多，可以提出一个模板
+* */
 import React from "react";
 import ReactDOM from "react-dom";
 import { Layout, Menu, Breadcrumb } from 'antd';

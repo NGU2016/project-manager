@@ -1,7 +1,14 @@
+
+/*
+*后续优化处理
+* 1，公共部分提出作为组件使用，代码重复率较高，新建修改删除都提成组件形式
+* 2，更新的时候找出变化的地方进行更新
+* */
 let express = require('express');
 let router = express.Router();
 let devModule = require("../module/module/DevModule.js");
-let browserModule = require("../module/module/BrowserModule.js")
+let browserModule = require("../module/module/BrowserModule.js");
+let leaveModule = require("../module/module/LeaveMdule.js");
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.render('index', {
@@ -118,6 +125,71 @@ router.post("/updateBrowsConfig",(req,res,next)=>{
         IE:updateItem.IE,
         firefox:updateItem.firefox,
         chrome:updateItem.chrome,
+        teammate:updateItem.teammate
+    }
+    }, (err,data) => {
+        if (err) {
+            console.log(err);
+        }else {
+            res.json(data)
+        }
+    })
+});
+
+
+/*请假信息*/
+router.post("/setLeaveConfig",(req,res,next)=>{
+    let newItem = req.body;
+    leaveModule.create(newItem, (err) => {
+        if (err) {
+            console.log(err);
+        }else {
+            leaveModule.find({}, (err, data) => {
+                if (err) {
+                    console.log(err);
+                }else {
+                    res.json(data);
+                }
+            });
+        }
+    })
+});
+
+
+router.get('/getAllLeaveInfo', (req, res, next) => {
+    leaveModule.find({}, (err, data) => {
+        if (err) {
+            console.log(err);
+        }else {
+            console.log(data)
+            res.json(data);
+
+        }
+    });
+});
+
+
+router.post("/deleteRawLeave",(req,res,next)=>{
+    let deleteItem = req.body;
+    leaveModule.remove(deleteItem, (err,data) => {
+        if (err) {
+            console.log(err);
+        }else {
+            res.json(data)
+        }
+    })
+});
+
+
+router.post("/updateLeaveConfig",(req,res,next)=>{
+    let updateItem = req.body;
+    let ID=updateItem._id;
+    leaveModule.update({"_id":ID},{$set:{
+        begintime:updateItem.begintime,
+        endtime:updateItem.endtime,
+        emergency:updateItem.emergency,
+        emergencyNum:updateItem.emergencyNum,
+        assessing:updateItem.assessing,
         teammate:updateItem.teammate
     }
     }, (err,data) => {

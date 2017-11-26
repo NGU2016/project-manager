@@ -1,6 +1,5 @@
 import { Table, Button,Icon } from 'antd';
 import React from "react";
-import ReactDOM from "react-dom";
 import  BrowserConfig from "./config/BrowserConfig.js";
 import $ from "jquery"
 
@@ -35,12 +34,13 @@ class BrowserTabel extends React.Component{
         })
     }
 
-    deleteRaw(){
+    deleteRaw(value){
         const me=this;
         $.ajax({
             url:"/deleteRawBrow",
             type: 'post',
             dataType: 'json',
+            data:value,
             success: data => {
                 me.getAllBrowserInfo();
             },
